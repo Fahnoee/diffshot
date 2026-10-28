@@ -118,7 +118,8 @@ async function readPipedStdin(waitMs = 1500) {
     return '';
   }
   if (stat.isFile()) return readStdin();
-  if (!stat.isFIFO() && !stat.isSocket()) return '';
+  // Windows pipes don't report as FIFOs, so anything that isn't a terminal counts.
+  if (process.stdin.isTTY) return '';
   return new Promise((resolveText) => {
     const chunks = [];
     const timer = setTimeout(() => {
