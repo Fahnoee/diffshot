@@ -1,0 +1,21 @@
+diff --git a/server.ts b/server.ts
+index 4f94f6a..ea1b74b 100644
+--- a/server.ts
++++ b/server.ts
+@@ -1,11 +1,13 @@
+ import express from "express";
++import { rateLimit } from "./middleware/rate-limit";
+ 
+ const app = express();
+-const PORT = 3000;
++const PORT = Number(process.env.PORT ?? 3000);
+ 
+-// Fetch a user by id
+-app.get("/users/:id", async (req, res) => {
++// Fetch a user by id, returning 404 when missing
++app.get("/users/:id", rateLimit({ perMinute: 60 }), async (req, res) => {
+   const user = await db.users.find(req.params.id);
++  if (!user) return res.status(404).json({ error: "not found" });
+   res.json(user);
+ });
+ 

@@ -1,0 +1,37 @@
+diff --git a/src/cache.py b/src/cache.py
+index 3b18e51..a7c9f02 100644
+--- a/src/cache.py
++++ b/src/cache.py
+@@ -1,14 +1,19 @@
+ import time
++from threading import Lock
+ 
+ 
+ class TTLCache:
+-    def __init__(self, ttl):
++    def __init__(self, ttl: float = 60.0, max_size: int = 1024):
+         self.ttl = ttl
++        self.max_size = max_size
+         self._data = {}
++        self._lock = Lock()
+ 
+     def get(self, key, default=None):
+-        value, expires = self._data.get(key, (default, 0))
+-        if time.time() > expires:
+-            return default
+-        return value
++        with self._lock:
++            value, expires = self._data.get(key, (default, 0))
++            if time.monotonic() > expires:
++                self._data.pop(key, None)
++                return default
++            return value
+diff --git a/README.md b/README.md
+index 1d2c3e4..5f6a7b8 100644
+--- a/README.md
++++ b/README.md
+@@ -3,4 +3,4 @@
+ A tiny in-memory cache.
+ 
+-Not thread safe.
++Thread safe, with TTL expiry and a size limit.

@@ -1,0 +1,23 @@
+{
+  "name": "diffshot",
+  "version": "0.1.0",
+  "description": "Turn git diffs into beautiful, shareable images. Syntax highlighting, word-level changes, gradients, PNG or SVG.",
+  "type": "module",
+  "bin": { "diffshot": "bin/diffshot.js" },
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": ["bin", "src", "assets"],
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "examples": "node scripts/examples.js"
+  },
+  "engines": { "node": ">=20" },
+  "keywords": ["git", "diff", "screenshot", "image", "cli", "code", "share", "carbon", "syntax-highlighting"],
+  "license": "MIT",
+  "repository": { "type": "git", "url": "git+https://github.com/Fahnoee/diffshot.git" },
+  "dependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "shiki": "^4.5.0"
+  }
+}

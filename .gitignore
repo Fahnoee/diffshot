@@ -1,0 +1,5 @@
+node_modules/
+*.png
+!docs/*.png
+*.svg
+!docs/*.svg
